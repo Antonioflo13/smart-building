@@ -1,7 +1,7 @@
-import StoreBuild from "../truffle/build/contracts/Struct.json";
+import RoomsBuild from "../truffle/build/contracts/Rooms.json";
 import Web3 from "web3";
 let selectedAccount;
-let storeContract;
+let roomsContract;
 let isInitialized = false;
 
 export const init = async () => {
@@ -24,29 +24,29 @@ export const init = async () => {
   }
   const web3 = new Web3(provider);
   const networkId = await web3.eth.net.getId();
-  storeContract = new web3.eth.Contract(
-    StoreBuild.abi,
-    StoreBuild.networks[networkId].address
+  roomsContract = new web3.eth.Contract(
+    RoomsBuild.abi,
+    RoomsBuild.networks[networkId].address
   );
   isInitialized = true;
 };
 
-export async function setHash(value) {
+export async function setRoom(address, owner, hashedFile, idRoom) {
   if (!isInitialized) {
     await init();
   }
 
-  return storeContract.methods
-    .setRoomInfo(2, "test", "test")
+  return roomsContract.methods
+    .setRoomInfo(address, owner, hashedFile, idRoom)
     .send({ from: selectedAccount });
 }
 
-export async function readHash() {
+export async function getRoomInfo(address) {
   if (!isInitialized) {
     await init();
   }
 
-  return storeContract.methods.getRoomInfo().call((err, result) => {
+  return roomsContract.methods.getRoomInfo(address).call((err, result) => {
     console.log("stored cid in smart contract:", result);
   });
 }

@@ -1,39 +1,23 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity >=0.8.7;
 
-
-
-contract Struct {
-
+contract Rooms {
     struct Room{
-
-        string roomOwner;
-
         string roomHash;
-
+        string roomOwner;
+        uint256 roomID;
     }
 
+    mapping (string => Room) AllRooms;
 
-
-    mapping (uint256 => Room) AllRooms;
-
-
-
-    function setRoomInfo(uint256 roomID, string memory r_owner, string memory r_hash) public {
-
-        AllRooms[roomID].roomOwner = r_owner;
-
-        AllRooms[roomID].roomHash = r_hash;
-
+    function setRoomInfo(string memory accountId, string memory r_owner, string memory r_hash, uint256 roomID) public {
+        AllRooms[accountId].roomOwner = r_owner;
+        AllRooms[accountId].roomHash = r_hash;
+        AllRooms[accountId].roomID = roomID;
     }
 
-
-
-    function getRoomInfo(uint256 roomID) public view returns(string memory r_owner, string memory r_hash) {
-
-        return (AllRooms[roomID].roomOwner, AllRooms[roomID].roomHash);
-
+    function getRoomInfo(string memory accountId) public view returns(string memory r_owner, string memory r_hash, uint256 roomID) {
+        return (AllRooms[accountId].roomOwner, AllRooms[accountId].roomHash, AllRooms[accountId].roomID);
     }
 
 }
